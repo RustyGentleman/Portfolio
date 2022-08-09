@@ -35,7 +35,7 @@ body {
   min-height: 100vh;
   margin: 0;
   font-family: "Kanit", sans-serif;
-  font-size: min(16px, 4vmin);
+  font-size: min(16px, 3vmin);
   background: rgb(10, 10, 10);
   overflow-x: hidden;
   overflow-y: overlay;
