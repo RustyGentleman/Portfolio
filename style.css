@@ -26,16 +26,17 @@
   }
 }
 body {
-  min-height: 100vh;
-  width: 100vw;
-  margin: 0;
-  font-family: "Kanit", sans-serif;
-  background: rgb(10, 10, 10);
   display: flex;
   place-content: center;
   place-items: center;
   flex-wrap: wrap;
   text-align: center;
+  width: 100vw;
+  min-height: 100vh;
+  margin: 0;
+  font-family: "Kanit", sans-serif;
+  font-size: min(16px, 4vmin);
+  background: rgb(10, 10, 10);
   overflow-x: hidden;
   overflow-y: overlay;
 }
@@ -46,21 +47,22 @@ body {
   place-items: center;
   flex-wrap: wrap;
   text-align: center;
+  box-sizing: border-box;
   position: relative;
-  width: 80%;
+  width: 100%;
   max-width: 1000px;
-  margin: 10vmin;
+  min-height: 100vh;
 }
 
 .window {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, 200px);
-  grid-template-rows: repeat(auto-fit, 200px);
-  justify-content: center;
-  gap: 30px;
-  width: 100%;
-  perspective: 1500px;
   position: absolute;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, min(230px, 40vw));
+  grid-auto-rows: min(230px, 40vw);
+  gap: 10px;
+  justify-content: center;
+  perspective: 1500px;
   z-index: -1;
   opacity: 0;
 }
@@ -89,28 +91,22 @@ body {
   background: repeating-linear-gradient(0deg, transparent 0%, rgba(var(--accent-rgb), 0.3) 7px);
   -webkit-animation: background-scroll-down 10s linear var(--bg-anim-delay) infinite;
           animation: background-scroll-down 10s linear var(--bg-anim-delay) infinite;
+  box-sizing: border-box;
   position: relative;
   height: 100%;
   width: 100%;
   padding: 10px;
-  margin: 5px;
   border-radius: 10px;
   box-shadow: inset 0 0 100px -50px var(--accent), 0 0 10px var(--accent);
   background-blend-mode: normal;
   color: var(--text-color);
-  font-size: 16px;
+  font-size: 1em;
   cursor: pointer;
   -webkit-user-select: none;
      -moz-user-select: none;
           user-select: none;
   transform: rotateY(var(--rot-y)) scale(var(--scale));
   transition: background-color 0.1s ease 0.3s, color 0.1s ease 0.3s, transform 0.1s ease-out;
-}
-.panel.flipped .panel-lining {
-  opacity: 0;
-}
-.panel.flipped .panel-lining.backface {
-  opacity: 1;
 }
 .panel [data-link] {
   color: var(--accent);
@@ -159,6 +155,24 @@ body {
   transform: translate(calc(var(--off-x) * 30 * -1px), calc(var(--off-y) * 30 * 1px)) scale(var(--scale)) rotateY(180deg);
   opacity: 0;
 }
+.panel::before {
+  transform: translate(calc(var(--off-x) * 30 * -1px), calc(var(--off-y) * 30 * 1px)) scale(var(--scale));
+  background: repeating-linear-gradient(0deg, transparent 0%, rgb(0, 0, 0) 5px);
+  -webkit-animation: background-scroll-down 10s linear var(--bg-anim-delay) infinite;
+          animation: background-scroll-down 10s linear var(--bg-anim-delay) infinite;
+  content: "";
+  position: absolute;
+  height: 105%;
+  width: 105%;
+  background-color: rgba(200, 200, 200, 0.3);
+  box-shadow: 0 0 10px rgba(200, 200, 200, 0.3);
+  border-radius: 10px;
+  filter: blur(1px);
+  opacity: 1;
+  transition: background-color 0.1s ease 0.4s, filter 0.1s ease 0.3s, height 0.1s ease 0.3s, width 0.1s ease 0.3s;
+  mix-blend-mode: plus-lighter;
+  z-index: -1;
+}
 .panel:focus {
   -webkit-animation: flash 0.1s ease 1;
           animation: flash 0.1s ease 1;
@@ -191,23 +205,11 @@ body {
   width: 108%;
   transition: background-color 0.1s ease, height 0.1s ease, width 0.1s ease;
 }
-.panel::before {
-  transform: translate(calc(var(--off-x) * 30 * -1px), calc(var(--off-y) * 30 * 1px)) scale(var(--scale));
-  background: repeating-linear-gradient(0deg, transparent 0%, rgb(0, 0, 0) 5px);
-  -webkit-animation: background-scroll-down 10s linear var(--bg-anim-delay) infinite;
-          animation: background-scroll-down 10s linear var(--bg-anim-delay) infinite;
-  content: "";
-  position: absolute;
-  height: 105%;
-  width: 105%;
-  background-color: rgba(200, 200, 200, 0.3);
-  box-shadow: 0 0 10px rgba(200, 200, 200, 0.3);
-  border-radius: 10px;
-  filter: blur(1px);
+.panel.flipped .panel-lining {
+  opacity: 0;
+}
+.panel.flipped .panel-lining.backface {
   opacity: 1;
-  transition: background-color 0.1s ease 0.4s, filter 0.1s ease 0.3s, height 0.1s ease 0.3s, width 0.1s ease 0.3s;
-  mix-blend-mode: plus-lighter;
-  z-index: -1;
 }
 
 .face {
@@ -220,11 +222,21 @@ body {
   --scale: 1;
   --flip: 0;
   transform-origin: center center;
-  transform: rotateX(var(--rot-x)) rotateY(var(--rot-y)) translate(var(--trans-x), var(--trans-y)) scale(var(--scale));
+  transform: rotateX(var(--rot-x)) rotateY(var(--rot-y)) scale(var(--scale)) translate(var(--trans-x), var(--trans-y));
+}
+.face.vert {
+  --off-x: 0;
+  --off-y: 0;
+  --rot-x: calc(var(--off-y) * 1rad);
+  --rot-y: 0;
+  --trans-x: calc(calc(var(--off-x) * 150) * -1px);
+  --trans-y: calc(calc(var(--off-y) * 150) * 1px);
+  --scale: 1;
+  --flip: 0;
 }
 
 .icon {
-  font-size: 60px;
+  font-size: 4rem;
   margin: 10px;
 }
 

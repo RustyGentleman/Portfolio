@@ -30,8 +30,16 @@
 	--scale: 1
 	--flip: 0
 	transform-origin: center center
-	transform: rotateX(var(--rot-x)) rotateY(var(--rot-y)) translate(var(--trans-x), var(--trans-y)) scale(var(--scale))
-	// transition: transform 200ms ease-out
+	transform: rotateX(var(--rot-x)) rotateY(var(--rot-y)) scale(var(--scale)) translate(var(--trans-x), var(--trans-y))
+@mixin face-vertical()
+	--off-x: 0
+	--off-y: 0
+	--rot-x: calc(var(--off-y) * 1rad)
+	--rot-y: 0
+	--trans-x: calc(calc(var(--off-x) * 150) * -1px)
+	--trans-y: calc(calc(var(--off-y) * 150) * 1px)
+	--scale: 1
+	--flip: 0
 @mixin face_parallax($depth)
 	transform: translate(calc(calc(var(--off-x) * $depth) * -1px), calc(calc(var(--off-y) * $depth) * 1px)) scale(var(--scale))
 	// transition: transform 200ms ease-out
@@ -42,31 +50,33 @@
 	animation: background-scroll-down 10s linear var(--bg-anim-delay) infinite
 //! Structural
 body
-	min-height: 100vh
+	@include flex-center()
 	width: 100vw
+	min-height: 100vh
 	margin: 0
 	font-family: 'Kanit', sans-serif
+	font-size: min(16px, 3vmin)
 	background: rgb(10, 10, 10)
-	@include flex-center()
 	overflow-x: hidden
 	overflow-y: overlay
 #content-wrapper
 	@include flex-center()
+	@include bbox()
 	position: relative
 	// min-width: 700px
-	width: 80%
+	width: 100%
 	max-width: 1000px
-	margin: 10vmin
+	min-height: 100vh
 .window
 	// @include flex-center()
-	display: grid
-	grid-template-columns: repeat(auto-fit, 200px)
-	grid-template-rows: repeat(auto-fit, 200px)
-	justify-content: center
-	gap: 30px
-	width: 100%
-	perspective: 1500px
 	position: absolute
+	width: 100%
+	display: grid
+	grid-template-columns: repeat(auto-fit, min(230px, 40vw))
+	grid-auto-rows: min(230px, 40vw)
+	gap: 10px
+	justify-content: center
+	perspective: 1500px
 	z-index: -1
 	opacity: 0
 	// transition: opacity .3s ease-in, transform .3s ease-out
@@ -87,6 +97,7 @@ body
 	--dshift-color: magenta
 	@include flex-center()
 	@include crt-bg(rgba(var(--accent-rgb), .3))
+	@include bbox()
 	$transition-length: .1s
 	$transition-delay: .3s
 	$tx-shadow-offset: 0.5px
@@ -95,23 +106,17 @@ body
 	height: 100%
 	width: 100%
 	padding: 10px
-	margin: 5px
 	// border: 3px solid var(--accent)
 	border-radius: 10px
 	box-shadow: inset 0 0 100px -50px var(--accent), 0 0 10px var(--accent)
 	background-blend-mode: normal
 	color: var(--text-color)
 	// text-shadow: $tx-shadow-offset $tx-shadow-offset $tx-shadow-blur cyan, -$tx-shadow-offset -$tx-shadow-offset $tx-shadow-blur magenta
-	font-size: 16px
+	font-size: 1em
 	cursor: pointer
 	user-select: none
 	transform: rotateY(var(--rot-y)) scale(var(--scale))
 	transition: background-color $transition-length ease $transition-delay, color $transition-length ease $transition-delay, transform $transition-length ease-out
-	&.flipped
-		.panel-lining
-			opacity: 0
-			&.backface
-				opacity: 1
 	a
 	[data-link]
 		color: var(--accent)
@@ -147,6 +152,21 @@ body
 			// padding: 20px
 			transform: translate(calc(var(--off-x) * 30 * -1px), calc(var(--off-y) * 30 * 1px)) scale(var(--scale)) rotateY(180deg)
 			opacity: 0
+	&::before
+		@include face_parallax(30)
+		@include crt-bg(rgba(0, 0, 0, 1), 5px)
+		content: ''
+		position: absolute
+		height: 105%
+		width:  105%
+		background-color: rgba(200, 200, 200, .3)
+		box-shadow: 0 0 10px rgba(200, 200, 200, .3)
+		border-radius: 10px
+		filter: blur(1px)
+		opacity: 1
+		transition: background-color $transition-length ease $transition-delay+.1s, filter $transition-length ease $transition-delay, height $transition-length ease $transition-delay, width $transition-length ease $transition-delay//, transform 200ms ease-out
+		mix-blend-mode: plus-lighter
+		z-index: -1
 	&:focus
 		animation: flash .1s ease 1
 	&:hover,
@@ -175,25 +195,17 @@ body
 			height: 108%
 			width: 108%
 			transition: background-color $transition-length ease, height $transition-length ease, width $transition-length ease
-	&::before
-		@include face_parallax(30)
-		@include crt-bg(rgba(0, 0, 0, 1), 5px)
-		content: ''
-		position: absolute
-		height: 105%
-		width:  105%
-		background-color: rgba(200, 200, 200, .3)
-		box-shadow: 0 0 10px rgba(200, 200, 200, .3)
-		border-radius: 10px
-		filter: blur(1px)
-		opacity: 1
-		transition: background-color $transition-length ease $transition-delay+.1s, filter $transition-length ease $transition-delay, height $transition-length ease $transition-delay, width $transition-length ease $transition-delay//, transform 200ms ease-out
-		mix-blend-mode: plus-lighter
-		z-index: -1
+	&.flipped
+		.panel-lining
+			opacity: 0
+			&.backface
+				opacity: 1
 .face
 	@include face()
+	&.vert
+		@include face-vertical()
 .icon
-	font-size: 60px
+	font-size: 4rem
 	margin: 10px
 .bar-container
 	@include flex-center()

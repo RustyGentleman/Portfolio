@@ -29,7 +29,9 @@ $(document).ready(function(){
 	$('.panel-lining.backface').toggle()
 
 	// Perspective mousemovement stuff
-	$(window).on('resize', MouseLeave)
+	$(window).on('resize', () => {
+		MouseLeave()
+	})
 	$(document.body).on('mouseleave', MouseLeave)
 	$(document.body).on('mouseenter', () => $panels.each((i, e) => $(e).stop()))
 	$(document.body).on('mousemove', (event) => {
