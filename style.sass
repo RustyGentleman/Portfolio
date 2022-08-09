@@ -7,8 +7,11 @@
 		background-position-y: 0px
 	100%
 		background-position-y: 230px * 3
+
 //! Imports
 @import url('https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,300;1,100;1,300&display=swap')
+@import url('https://fonts.googleapis.com/css2?family=Oxanium:wght@200;300;400;500;600;700;800&display=swap')
+
 //! Mixins
 @mixin flex-center()
 	display: flex
@@ -54,11 +57,13 @@ body
 	width: 100vw
 	min-height: 100vh
 	margin: 0
-	font-family: 'Kanit', sans-serif
+	font-family: 'Oxanium', sans-serif
 	font-size: min(16px, 3vmin)
+	font-weight: 600
 	background: rgb(10, 10, 10)
 	overflow-x: hidden
 	overflow-y: overlay
+
 #content-wrapper
 	@include flex-center()
 	@include bbox()
@@ -67,6 +72,7 @@ body
 	width: 100%
 	max-width: 1000px
 	min-height: 100vh
+
 .window
 	// @include flex-center()
 	position: absolute
@@ -81,13 +87,16 @@ body
 	opacity: 0
 	// transition: opacity .3s ease-in, transform .3s ease-out
 	// transform: scale(0.8)
-	&.current
+	&.current,
+	&.always-up
 		z-index: 1
 		opacity: 1
 		// transform: scale(1)
+
 .panel-wrapper
 	height: 100%
 	width: 100%
+
 .panel
 	--accent: rgb(0, 120, 255)
 	--accent-rgb: 0, 120, 255
@@ -117,7 +126,8 @@ body
 	user-select: none
 	transform: rotateY(var(--rot-y)) scale(var(--scale))
 	transition: background-color $transition-length ease $transition-delay, color $transition-length ease $transition-delay, transform $transition-length ease-out
-	a
+
+	a,
 	[data-link]
 		color: var(--accent)
 		text-decoration: none
@@ -125,8 +135,11 @@ body
 		transition: color $transition-length ease, text-shadow  $transition-length ease
 		&:hover
 			text-shadow: -2px 2px 2px
+
 	.panel-text
 		text-align: center
+		font-weight: 400
+
 	.panel-lining
 		@include flex-center()
 		@include face_parallax(-30)
@@ -136,6 +149,7 @@ body
 		height: 100%
 		padding: 10px
 		transition: opacity .5s cubic-bezier(1, -1, 0, 2)
+
 		&.shift
 			filter: blur(3px)
 			&.up
@@ -148,10 +162,12 @@ body
 				color: var(--dshift-color)
 				&.backface
 					transform: translate(calc(calc(var(--off-x) * 25) * -1px), calc(calc(var(--off-y) * 25) * 1px)) rotateY(180deg)
+
 		&.backface
 			// padding: 20px
 			transform: translate(calc(var(--off-x) * 30 * -1px), calc(var(--off-y) * 30 * 1px)) scale(var(--scale)) rotateY(180deg)
 			opacity: 0
+
 	&::before
 		@include face_parallax(30)
 		@include crt-bg(rgba(0, 0, 0, 1), 5px)
@@ -167,8 +183,7 @@ body
 		transition: background-color $transition-length ease $transition-delay+.1s, filter $transition-length ease $transition-delay, height $transition-length ease $transition-delay, width $transition-length ease $transition-delay//, transform 200ms ease-out
 		mix-blend-mode: plus-lighter
 		z-index: -1
-	&:focus
-		animation: flash .1s ease 1
+
 	&:hover,
 	&.hovered
 		--text-color: rgb(0, 0, 0)
@@ -195,11 +210,15 @@ body
 			height: 108%
 			width: 108%
 			transition: background-color $transition-length ease, height $transition-length ease, width $transition-length ease
+
 	&.flipped
 		.panel-lining
 			opacity: 0
 			&.backface
 				opacity: 1
+
+	&:focus
+		animation: flash .1s ease 1
 .face
 	@include face()
 	&.vert

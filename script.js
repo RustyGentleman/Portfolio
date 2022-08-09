@@ -5,11 +5,9 @@ $(document).ready(function(){
 	let $panels = $('.face')
 
 	// Setup
-	$panels.each((i, e) => {
-		$(e).on('click', () => setTimeout(() => document.activeElement.blur(), 100))
-		$(e).css('--bg-anim-delay', Math.floor(Math.random()*10)+'ms')
-	})
 	$('.window').each((_, w) => {
+		if (!$(w).children().filter('#profile-info')[0])
+			$(w).children().first().before($('#profile-info').clone(true))
 		$(w).children().each((pi, pe) => {
 			$(pe).on('mouseenter', function() {
 				$('.window').each((ci, ce) => $($(ce).children()[pi].firstElementChild).addClass('hovered'))
@@ -18,6 +16,11 @@ $(document).ready(function(){
 				$('.window').each((ci, ce) => $($(ce).children()[pi].firstElementChild).removeClass('hovered'))
 			})
 		})
+		$panels = $('.face')
+	})
+	$panels.each((i, e) => {
+		$(e).on('click', () => setTimeout(() => document.activeElement.blur(), 100))
+		$(e).css('--bg-anim-delay', Math.floor(Math.random()*10)+'ms')
 	})
 	$('.panel-lining').each((_, e) => {
 		$(e).before($(e).clone().addClass('shadow'))
