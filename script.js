@@ -1,13 +1,19 @@
+var offsets = []
 $(document).ready(function(){
 	const DEBUG = 1
 	const PERSPECTIVE = 1500
 	let mouse = {x: 0, y: 0, moved: false}
-	let $panels = $('.face')
+	let $allpanels = $('.face')
+	let $mainpanels = $('#window-start .face')
+	let $windows = $('.window')
+	const isMobile = () => window.matchMedia('(hover: none) and (pointer: coarse)').matches
 
-	// Setup
+	//! Setup
+	//* Duplicate profile element,
+	//* add hover listener to panels
 	$('.window').each((_, w) => {
-		if (!$(w).children().filter('#profile-info')[0])
-			$(w).children().first().before($('#profile-info').clone(true))
+		if (!$(w).children().filter('#profile')[0])
+			$(w).children().first().before($('#profile').clone(true))
 		$(w).children().each((pi, pe) => {
 			$(pe).on('mouseenter', function() {
 				$('.window').each((ci, ce) => $($(ce).children()[pi].firstElementChild).addClass('hovered'))
@@ -16,39 +22,26 @@ $(document).ready(function(){
 				$('.window').each((ci, ce) => $($(ce).children()[pi].firstElementChild).removeClass('hovered'))
 			})
 		})
-		$panels = $('.face')
+		$allpanels = $('#window-start .face')
 	})
-	$panels.each((i, e) => {
+	//* Flash on click CSS thing
+	$allpanels.each((i, e) => {
 		$(e).on('click', () => setTimeout(() => document.activeElement.blur(), 100))
-		$(e).css('--bg-anim-delay', Math.floor(Math.random()*10)+'ms')
+		// $(e).css('--bg-anim-delay', Math.floor(Math.random()*10)+'ms')
 	})
+	//* Create shadow and chromatic aberration duplicates
 	$('.panel-lining').each((_, e) => {
 		$(e).before($(e).clone().addClass('shadow'))
 		$(e).before($(e).clone().addClass('shift up'))
 		$(e).before($(e).clone().addClass('shift down'))
 	})
-	setInterval(() => Face(), 16)
+	//* Face at 60fps
+	if (!isMobile())
+		setInterval(() => Face(), 16)
 	$(window).on('scroll', (event) => Face())
 	$('.panel-lining.backface').toggle()
-
-	// Perspective mousemovement stuff
-	$(window).on('resize', () => {
-		MouseLeave()
-	})
-	$(document.body).on('mouseleave', MouseLeave)
-	$(document.body).on('mouseenter', () => $panels.each((i, e) => $(e).stop()))
-	$(document.body).on('mousemove', (event) => {
-		if (event.screenX == mouse.x && event.screenY == mouse.y)
-			mouse.moved = false
-		else{
-			mouse.x = event.screenX
-			mouse.y = event.screenY
-			mouse.moved = true
-		}
-	})
-	// Page switches
-	$('[data-link]').on('click', function(){SwitchPage($(this).data('link'))})
-	// Custom bars
+	
+	//* Custom bars
 	$('bar').replaceWith(function() {
 		let container = $('<div class="bar-container"></div>')
 		let filled = parseInt($(this).attr('value'))
@@ -79,7 +72,26 @@ $(document).ready(function(){
 		container.append(bars)
 		return container
 	})
-	// Flippables
+
+	//! Listeners
+	//* Perspective mousemovement stuff
+	$(window).on('resize', () => {
+		MouseLeave()
+	})
+	$(document.body).on('mouseleave', MouseLeave)
+	$(document.body).on('mouseenter', () => $allpanels.each((i, e) => $(e).stop()))
+	$(document.body).on('mousemove', (event) => {
+		if (event.screenX == mouse.x && event.screenY == mouse.y)
+			mouse.moved = false
+		else{
+			mouse.x = event.screenX
+			mouse.y = event.screenY
+			mouse.moved = true
+		}
+	})
+	//* Page switches
+	$('[data-link]').on('click', function(){SwitchPage($(this).data('link'))})
+	//* Flippables
 	$('.panel.flip').on('click', function(){FlipPanel(this)})
 	
 	MouseLeave()
@@ -87,7 +99,7 @@ $(document).ready(function(){
 	function Face(){
 		// face_calls++
 		if (!mouse.moved) return
-		else $panels.each((i, e) => {
+		else $mainpanels.each((i, e) => {
 			let rects = e.getBoundingClientRect()
 			let offx = mouse.x - (rects.left + (rects.width / 2))
 			let offy = mouse.y - (rects.top + (rects.height / 2))
@@ -96,11 +108,19 @@ $(document).ready(function(){
 			$(e).css('--off-x', `${angleh}`)
 			$(e).css('--off-xa', `${Math.abs(angleh)}`)
 			$(e).css('--off-y', `${-anglev}`)
+			offsets[i] = {offx: angleh, offxa: Math.abs(angleh), offy: -anglev}
+		})
+		$windows.each((wi, we) => {
+			$(we).children().each((ci, ce) => {
+				$(ce).css('--off-x', `${offsets[ci].offx}`)
+				$(ce).css('--off-xa', `${offsets[ci].offxa}`)
+				$(ce).css('--off-y', `${offsets[ci].offy}`)
+			})
 		})
 	}
 	function MouseLeave(){
 		mouse.moved = false
-		$panels.each((i, e) => {
+		$allpanels.each((i, e) => {
 			let rects = e.getBoundingClientRect()
 			mouse.x = window.innerWidth/2
 			mouse.y = window.innerHeight/2
@@ -133,13 +153,18 @@ $(document).ready(function(){
 	}
 	function SwitchPage(id){
 		if (document.getElementById(`window-${id}`)) {
+			$('.current').children().find('.flip[style~="--flip:1;"]').click()
 			$('.current').toggleClass('current')
 			$(`#window-${id}`).toggleClass('current')
 		}
 	}
 	function FlipPanel(element){
-		let deg = ($(element).css('--flip') == '1')? 180 : 0
-		let final = ($(element).css('--flip') == '1')? 360 : 180
+		// let deg = ($(element).css('--flip') == '1')? 180 : 0
+		let deg = parseInt(Array.from($(element).css('--rot-y').match(/[0-9]+/g)).pop())
+		if (deg == 1)
+			deg = 0
+		// let final = ($(element).css('--flip') == '1')? 360 : 180
+		let final = deg + 180
 		let toggled = false
 		$(element).toggleClass('flipped')
 		$({n: deg}).animate({n: final}, {

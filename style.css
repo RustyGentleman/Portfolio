@@ -52,12 +52,17 @@ body {
   box-sizing: border-box;
   position: relative;
   width: 100%;
-  max-width: 1000px;
-  min-height: 100vh;
+  max-width: 1300px;
+  min-height: 80vh;
+  margin: 10vh 10vw;
+}
+
+h1 {
+  font-size: 3rem;
+  margin: 0.5rem 0;
 }
 
 .window {
-  position: absolute;
   width: 100%;
   display: grid;
   grid-template-columns: repeat(auto-fit, min(230px, 40vw));
@@ -67,10 +72,14 @@ body {
   perspective: 1500px;
   z-index: -1;
   opacity: 0;
+  height: 0;
+  overflow: hidden;
 }
 .window.current, .window.always-up {
   z-index: 1;
   opacity: 1;
+  height: auto;
+  overflow: inherit;
 }
 
 .panel-wrapper {
@@ -91,8 +100,8 @@ body {
   flex-wrap: wrap;
   text-align: center;
   background: repeating-linear-gradient(0deg, transparent 0%, rgba(var(--accent-rgb), 0.3) 7px);
-  -webkit-animation: background-scroll-down 10s linear var(--bg-anim-delay) infinite;
-          animation: background-scroll-down 10s linear var(--bg-anim-delay) infinite;
+  -webkit-animation: background-scroll-down 10s linear infinite;
+          animation: background-scroll-down 10s linear infinite;
   box-sizing: border-box;
   position: relative;
   height: 100%;
@@ -137,6 +146,7 @@ body {
   width: 100%;
   height: 100%;
   padding: 10px;
+  color: var(--text-color);
   transition: opacity 0.5s cubic-bezier(1, -1, 0, 2);
 }
 .panel .panel-lining.shift {
@@ -144,14 +154,14 @@ body {
 }
 .panel .panel-lining.shift.up {
   transform: translate(calc(var(--off-x) * -35 * -1px), calc(var(--off-y) * -35 * 1px)) scale(var(--scale));
-  color: var(--ushift-color);
+  --text-color: var(--ushift-color);
 }
 .panel .panel-lining.shift.up.backface {
   transform: translate(calc(var(--off-x) * 35 * -1px), calc(var(--off-y) * 35 * 1px)) rotateY(180deg);
 }
 .panel .panel-lining.shift.down {
   transform: translate(calc(var(--off-x) * -25 * -1px), calc(var(--off-y) * -25 * 1px)) scale(var(--scale));
-  color: var(--dshift-color);
+  --text-color: var(--dshift-color);
 }
 .panel .panel-lining.shift.down.backface {
   transform: translate(calc(var(--off-x) * 25 * -1px), calc(var(--off-y) * 25 * 1px)) rotateY(180deg);
@@ -163,8 +173,8 @@ body {
 .panel::before {
   transform: translate(calc(var(--off-x) * 30 * -1px), calc(var(--off-y) * 30 * 1px)) scale(var(--scale));
   background: repeating-linear-gradient(0deg, transparent 0%, rgb(0, 0, 0) 5px);
-  -webkit-animation: background-scroll-down 10s linear var(--bg-anim-delay) infinite;
-          animation: background-scroll-down 10s linear var(--bg-anim-delay) infinite;
+  -webkit-animation: background-scroll-down 10s linear infinite;
+          animation: background-scroll-down 10s linear infinite;
   content: "";
   position: absolute;
   height: 105%;
@@ -217,6 +227,43 @@ body {
           animation: flash 0.1s ease 1;
 }
 
+#profile {
+  display: flex;
+  place-content: center;
+  place-items: center;
+  flex-wrap: wrap;
+  text-align: center;
+}
+#profile article {
+  flex-grow: 0.8;
+}
+#profile #profile-image {
+  position: relative;
+  top: -20px;
+  height: 170%;
+  width: auto;
+  aspect-ratio: 1;
+}
+#profile #profile-image #rest {
+  fill: var(--text-color);
+  stroke: var(--text-color);
+  stroke-width: 5px;
+}
+#profile #profile-image #eyes {
+  mix-blend-mode: lighten;
+}
+#profile .shift #profile-image {
+  fill: none;
+  stroke-width: 5px;
+  stroke: var(--text-color);
+}
+#profile .shift #profile-image * {
+  mix-blend-mode: darken;
+}
+#profile .panel-lining:not(.shift) #profile-image {
+  --text-color: inherit;
+}
+
 .face {
   --off-x: 0;
   --off-y: 0;
@@ -227,7 +274,16 @@ body {
   --scale: 1;
   --flip: 0;
   transform-origin: center center;
-  transform: rotateX(var(--rot-x)) rotateY(var(--rot-y)) scale(var(--scale)) translate(var(--trans-x), var(--trans-y));
+}
+@media (hover: none) and (pointer: coarse) {
+  .face {
+    transform: none;
+  }
+}
+@media (hover: hover) and (pointer: fine) {
+  .face {
+    transform: rotateX(var(--rot-x)) rotateY(var(--rot-y)) scale(var(--scale)) translate(var(--trans-x), var(--trans-y));
+  }
 }
 .face.vert {
   --off-x: 0;
