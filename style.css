@@ -65,8 +65,8 @@ h1 {
 .window {
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(auto-fit, min(230px, 40vw));
-  grid-auto-rows: min(230px, 40vw);
+  grid-template-columns: repeat(auto-fit, min(230px, 38vw));
+  grid-auto-rows: min(230px, 38vw);
   gap: 10px;
   justify-content: center;
   perspective: 1500px;
