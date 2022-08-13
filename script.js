@@ -14,14 +14,14 @@ $(document).ready(function(){
 	$('.window').each((_, w) => {
 		if (!$(w).children().filter('#profile')[0])
 			$(w).children().first().before($('#profile').clone(true))
-		$(w).children().each((pi, pe) => {
-			$(pe).on('mouseenter', function() {
-				$('.window').each((ci, ce) => $($(ce).children()[pi]?.firstElementChild).addClass('hovered'))
-			})
-			.on('mouseleave', function() {
-				$('.window').each((ci, ce) => $($(ce).children()[pi]?.firstElementChild).removeClass('hovered'))
-			})
-		})
+		// $(w).children().each((pi, pe) => {
+		// 	$(pe).on('mouseenter', function() {
+		// 		$('.window').each((ci, ce) => $($(ce).children()[pi]?.firstElementChild).addClass('hovered'))
+		// 	})
+		// 	.on('mouseleave', function() {
+		// 		$('.window').each((ci, ce) => $($(ce).children()[pi]?.firstElementChild).removeClass('hovered'))
+		// 	})
+		// })
 		$allpanels = $('#window-start .face')
 	})
 	//* Flash on click CSS thing
@@ -105,9 +105,9 @@ $(document).ready(function(){
 			let offy = mouse.y - (rects.top + (rects.height / 2))
 			let angleh = Math.atan(offx / PERSPECTIVE)
 			let anglev = Math.atan(offy / PERSPECTIVE)
-			$(e).css('--off-x', `${angleh}`)
-			$(e).css('--off-xa', `${Math.abs(angleh)}`)
-			$(e).css('--off-y', `${-anglev}`)
+			// $(e).css('--off-x', `${angleh}`)
+			// $(e).css('--off-xa', `${Math.abs(angleh)}`)
+			// $(e).css('--off-y', `${-anglev}`)
 			offsets[i] = {offx: angleh, offxa: Math.abs(angleh), offy: -anglev}
 		})
 		$windows.each((wi, we) => {
