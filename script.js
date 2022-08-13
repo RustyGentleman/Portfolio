@@ -16,10 +16,10 @@ $(document).ready(function(){
 			$(w).children().first().before($('#profile').clone(true))
 		$(w).children().each((pi, pe) => {
 			$(pe).on('mouseenter', function() {
-				$('.window').each((ci, ce) => $($(ce).children()[pi].firstElementChild).addClass('hovered'))
+				$('.window').each((ci, ce) => $($(ce).children()[pi]?.firstElementChild).addClass('hovered'))
 			})
 			.on('mouseleave', function() {
-				$('.window').each((ci, ce) => $($(ce).children()[pi].firstElementChild).removeClass('hovered'))
+				$('.window').each((ci, ce) => $($(ce).children()[pi]?.firstElementChild).removeClass('hovered'))
 			})
 		})
 		$allpanels = $('#window-start .face')

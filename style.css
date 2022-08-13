@@ -92,8 +92,10 @@ h1 {
   --accent-rgb: 0, 120, 255;
   --accent-hue: 212deg;
   --text-color: rgb(200, 200, 200);
-  --ushift-color: cyan;
-  --dshift-color: magenta;
+  --ushift-color: rgb(0, 255, 255);
+  --ushift-color-rgb: 0, 255, 255;
+  --dshift-color: rgb(255, 0, 255);
+  --dshift-color-rgb: 255, 0, 255;
   display: flex;
   place-content: center;
   place-items: center;
@@ -128,9 +130,12 @@ h1 {
 }
 .panel a:hover,
 .panel [data-link]:hover {
+  color: white;
   text-shadow: -2px 2px 2px;
 }
 .panel .panel-text {
+  display: inline-block;
+  width: 100%;
   text-align: center;
   font-weight: 400;
 }
@@ -170,6 +175,14 @@ h1 {
   transform: translate(calc(var(--off-x) * 30 * -1px), calc(var(--off-y) * 30 * 1px)) scale(var(--scale)) rotateY(180deg);
   opacity: 0;
 }
+.panel.flip::after {
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  content: "\f2ea";
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
 .panel::before {
   transform: translate(calc(var(--off-x) * 30 * -1px), calc(var(--off-y) * 30 * 1px)) scale(var(--scale));
   background: repeating-linear-gradient(0deg, transparent 0%, rgb(0, 0, 0) 5px);
@@ -188,14 +201,16 @@ h1 {
   mix-blend-mode: plus-lighter;
   z-index: -1;
 }
+.panel a:after {
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  content: " \f08e";
+}
 .panel:hover, .panel.hovered {
   --text-color: rgb(0, 0, 0);
   background-color: rgba(var(--accent-rgb), 1);
   --scale: 1.03;
   transition: background-color 0.1s ease, color 0.1s ease, transform 0.1s ease;
-}
-.panel:hover [data-link], .panel.hovered [data-link] {
-  color: white;
 }
 .panel:hover .shift.up [data-link], .panel.hovered .shift.up [data-link] {
   color: var(--ushift-color);
@@ -264,6 +279,26 @@ h1 {
   --text-color: inherit;
 }
 
+#rasflame-container {
+  height: 5rem;
+  margin: 10px;
+}
+#rasflame-container #rasflame {
+  position: relative;
+  height: 8rem;
+  bottom: 3rem;
+}
+#rasflame-container #rasflame #core {
+  fill: none;
+}
+#rasflame-container #rasflame #body {
+  fill: var(--text-color);
+}
+#rasflame-container #rasflame #outline {
+  fill: var(--text-color);
+  opacity: 0.5;
+}
+
 .face {
   --off-x: 0;
   --off-y: 0;
@@ -298,6 +333,11 @@ h1 {
 
 .icon {
   font-size: 4rem;
+  margin: 10px;
+}
+
+.lang-icon {
+  font-size: 5rem;
   margin: 10px;
 }
 

@@ -54,6 +54,9 @@
 @mixin crt-bg($color, $line-thickness: 7px)
 	background: repeating-linear-gradient(0deg, transparent 0%, $color $line-thickness)
 	animation: background-scroll-down 10s linear infinite
+@mixin fa()
+		font-family: "Font Awesome 6 Free"
+		font-weight: 900
 //! Structural
 body
 	@include flex-center()
@@ -114,8 +117,10 @@ h1
 	--accent-rgb: 0, 120, 255
 	--accent-hue: 212deg
 	--text-color: rgb(200, 200, 200)
-	--ushift-color: cyan
-	--dshift-color: magenta
+	--ushift-color: rgb(0, 255, 255)
+	--ushift-color-rgb: 0, 255, 255
+	--dshift-color: rgb(255, 0, 255)
+	--dshift-color-rgb: 255, 0, 255
 	@include flex-center()
 	@include crt-bg(rgba(var(--accent-rgb), .3))
 	@include bbox()
@@ -145,9 +150,12 @@ h1
 		text-shadow: 0 0
 		transition: color $transition-length ease, text-shadow  $transition-length ease
 		&:hover
+			color: white
 			text-shadow: -2px 2px 2px
 
 	.panel-text
+		display: inline-block
+		width: 100%
 		text-align: center
 		font-weight: 400
 
@@ -160,7 +168,7 @@ h1
 		height: 100%
 		padding: 10px
 		color: var(--text-color)
-		transition: opacity .5s cubic-bezier(1, -1, 0, 2)
+		transition: opacity .5s cubic-bezier(1, -1, 0, 2)//, color $transition-length ease $transition-delay
 
 		&.shift
 			filter: blur(3px)
@@ -180,6 +188,13 @@ h1
 			transform: translate(calc(var(--off-x) * 30 * -1px), calc(var(--off-y) * 30 * 1px)) scale(var(--scale)) rotateY(180deg)
 			opacity: 0
 
+	&.flip::after
+		@include fa()
+		content: '\f2ea'
+		position: absolute
+		top: 10px
+		right: 10px
+
 	&::before
 		@include face_parallax(30)
 		@include crt-bg(rgba(0, 0, 0, 1), 5px)
@@ -196,15 +211,19 @@ h1
 		mix-blend-mode: plus-lighter
 		z-index: -1
 
+	a:after
+		@include fa()
+		content: ' \f08e'
+
 	&:hover,
 	&.hovered
 		--text-color: rgb(0, 0, 0)
 		background-color: rgba(var(--accent-rgb), 1)
 		--scale: 1.03
 		transition: background-color $transition-length ease, color $transition-length ease, transform $transition-length ease
-		a
-		[data-link]
-			color: white
+		// a,
+		// [data-link]
+		// 	color: white
 		.shift.up a
 		.shift.up [data-link]
 			color: var(--ushift-color)
@@ -214,6 +233,8 @@ h1
 		.bar-container .caption
 			height: 25px
 			opacity: 1
+		.panel-text
+			// transition: opacity .5s cubic-bezier(1, -1, 0, 2), color $transition-length ease
 		&::before
 			@include face_parallax(-30)
 			--scale: 1
@@ -258,6 +279,20 @@ h1
 	.panel-lining:not(.shift) #profile-image
 		--text-color: inherit
 
+#rasflame-container
+	height: 5rem
+	margin: 10px
+	#rasflame
+		position: relative
+		height: 8rem
+		bottom: 3rem
+		#core
+			fill: none
+		#body
+			fill: var(--text-color)
+		#outline
+			fill: var(--text-color)
+			opacity: 0.5
 
 .face
 	@include face()
@@ -266,6 +301,9 @@ h1
 
 .icon
 	font-size: 4rem
+	margin: 10px
+.lang-icon
+	font-size: 5rem
 	margin: 10px
 
 .bar-container
