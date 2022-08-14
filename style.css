@@ -87,6 +87,11 @@ h1 {
   width: 100%;
 }
 
+.current .panel {
+  -webkit-animation-play-state: running;
+          animation-play-state: running;
+}
+
 .panel {
   --accent: rgb(0, 120, 255);
   --accent-rgb: 0, 120, 255;
@@ -101,10 +106,12 @@ h1 {
   place-items: center;
   flex-wrap: wrap;
   text-align: center;
+  box-sizing: border-box;
   background: repeating-linear-gradient(0deg, transparent 0%, rgba(var(--accent-rgb), 0.3) 7px);
   -webkit-animation: background-scroll-down 10s linear infinite;
           animation: background-scroll-down 10s linear infinite;
-  box-sizing: border-box;
+  -webkit-animation-play-state: paused;
+          animation-play-state: paused;
   position: relative;
   height: 100%;
   width: 100%;
@@ -146,6 +153,7 @@ h1 {
   flex-wrap: wrap;
   text-align: center;
   transform: translate(calc(var(--off-x) * -30 * -1px), calc(var(--off-y) * -30 * 1px)) scale(var(--scale));
+  will-change: transform;
   box-sizing: border-box;
   position: absolute;
   width: 100%;
@@ -159,6 +167,7 @@ h1 {
 }
 .panel .panel-lining.shift.up {
   transform: translate(calc(var(--off-x) * -35 * -1px), calc(var(--off-y) * -35 * 1px)) scale(var(--scale));
+  will-change: transform;
   --text-color: var(--ushift-color);
 }
 .panel .panel-lining.shift.up.backface {
@@ -166,6 +175,7 @@ h1 {
 }
 .panel .panel-lining.shift.down {
   transform: translate(calc(var(--off-x) * -25 * -1px), calc(var(--off-y) * -25 * 1px)) scale(var(--scale));
+  will-change: transform;
   --text-color: var(--dshift-color);
 }
 .panel .panel-lining.shift.down.backface {
@@ -185,14 +195,12 @@ h1 {
 }
 .panel::before {
   transform: translate(calc(var(--off-x) * 30 * -1px), calc(var(--off-y) * 30 * 1px)) scale(var(--scale));
-  background: repeating-linear-gradient(0deg, transparent 0%, rgb(0, 0, 0) 5px);
-  -webkit-animation: background-scroll-down 10s linear infinite;
-          animation: background-scroll-down 10s linear infinite;
+  will-change: transform;
   content: "";
   position: absolute;
   height: 105%;
   width: 105%;
-  background-color: rgba(200, 200, 200, 0.3);
+  background-color: rgba(200, 200, 200, 0.1);
   box-shadow: 0 0 10px rgba(200, 200, 200, 0.3);
   border-radius: 10px;
   filter: blur(1px);
@@ -212,23 +220,16 @@ h1 {
   --scale: 1.03;
   transition: background-color 0.1s ease, color 0.1s ease, transform 0.1s ease;
 }
-.panel:hover .shift.up [data-link], .panel.hovered .shift.up [data-link] {
-  color: var(--ushift-color);
-}
-.panel:hover .shift.down [data-link], .panel.hovered .shift.down [data-link] {
-  color: var(--dshift-color);
-}
 .panel:hover .bar-container .caption, .panel.hovered .bar-container .caption {
   height: 25px;
   opacity: 1;
 }
 .panel:hover::before, .panel.hovered::before {
   transform: translate(calc(var(--off-x) * -30 * -1px), calc(var(--off-y) * -30 * 1px)) scale(var(--scale));
-  --scale: 1;
+  will-change: transform;
+  --scale: 1.08;
   background-color: hsl(var(--accent-hue), 70%, 70%);
   box-shadow: 0 0 10px hsl(var(--accent-hue), 70%, 70%);
-  height: 108%;
-  width: 108%;
   transition: background-color 0.1s ease, height 0.1s ease, width 0.1s ease;
 }
 .panel.flipped .panel-lining {
@@ -287,6 +288,7 @@ h1 {
   position: relative;
   height: 8rem;
   bottom: 3rem;
+  width: 100%;
 }
 #rasflame-container #rasflame #core {
   fill: none;
@@ -318,6 +320,7 @@ h1 {
 @media (hover: hover) and (pointer: fine) {
   .face {
     transform: rotateX(var(--rot-x)) rotateY(var(--rot-y)) scale(var(--scale)) translate(var(--trans-x), var(--trans-y));
+    will-change: transform;
   }
 }
 .face.vert {

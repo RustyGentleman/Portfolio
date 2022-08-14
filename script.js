@@ -1,17 +1,17 @@
 $(document).ready(function(){
-	// ? Constants
+	// ? ----------------- Constants ---------------- //
 	const DEBUG = 1
 	const PERSPECTIVE = 1500
 	const isMobile = () => window.matchMedia('(hover: none) and (pointer: coarse)').matches
-	// ? Statekeepers
+	// ? --------------- Statekeepers --------------- //
 	let offsets = []
 	let mouse = {x: 0, y: 0, moved: false}
-	// ? Quick-access collections
+	// ? --------- Quick-access collections --------- //
 	let $windows = Array.from(document.querySelectorAll('.window'))
 	let $current_window_id = document.querySelector('.window.current').id
 	let $panels = []
 	let $panels_start = []
-	// ? Performance guards
+	// ? ------------ Performance guards ------------ //
 	let interval = 16
 	let face_calls = 0
 	let allow_face_call = true
@@ -20,7 +20,9 @@ $(document).ready(function(){
 
 	ResetIntervals()
 
-	// ! Setup
+	// ! -------------------------------------------- //
+	// ! ------------------- Setup ------------------ //
+	// ! -------------------------------------------- //
 	// * Duplicate profile element
 	// * Populate $panels and $panels_start collections
 	$('.window').each((_, w) => {
@@ -83,7 +85,10 @@ $(document).ready(function(){
 		return container
 	})
 
-	//! Listeners
+	// ! -------------------------------------------- //
+	// ! ----------------- Listeners ---------------- //
+	// ! -------------------------------------------- //
+
 	// * Perspective mousemovement stuff
 	if (!isMobile()) {
 		$(window).on('resize', MouseLeave)
