@@ -37,6 +37,7 @@
 		transform: none
 	@media (hover: hover) and (pointer: fine)
 		transform: rotateX(var(--rot-x)) rotateY(var(--rot-y)) scale(var(--scale)) translate(var(--trans-x), var(--trans-y))
+		will-change: transform
 @mixin face-vertical()
 	--off-x: 0
 	--off-y: 0
@@ -48,6 +49,7 @@
 	--flip: 0
 @mixin face_parallax($depth)
 	transform: translate(calc(calc(var(--off-x) * $depth) * -1px), calc(calc(var(--off-y) * $depth) * 1px)) scale(var(--scale))
+	will-change: transform
 	// transition: transform 200ms ease-out
 @mixin bbox()
 	box-sizing: border-box
@@ -112,6 +114,8 @@ h1
 	height: 100%
 	width: 100%
 
+.current .panel
+	animation-play-state: running
 .panel
 	--accent: rgb(0, 120, 255)
 	--accent-rgb: 0, 120, 255
@@ -122,8 +126,9 @@ h1
 	--dshift-color: rgb(255, 0, 255)
 	--dshift-color-rgb: 255, 0, 255
 	@include flex-center()
-	@include crt-bg(rgba(var(--accent-rgb), .3))
 	@include bbox()
+	@include crt-bg(rgba(var(--accent-rgb), .3))
+	animation-play-state: paused
 	$transition-length: .1s
 	$transition-delay: .3s
 	$tx-shadow-offset: 0.5px
@@ -197,12 +202,12 @@ h1
 
 	&::before
 		@include face_parallax(30)
-		@include crt-bg(rgba(0, 0, 0, 1), 5px)
+		// @include crt-bg(rgba(0, 0, 0, 1))
 		content: ''
 		position: absolute
 		height: 105%
 		width:  105%
-		background-color: rgba(200, 200, 200, .3)
+		background-color: rgba(200, 200, 200, .1)
 		box-shadow: 0 0 10px rgba(200, 200, 200, .3)
 		border-radius: 10px
 		filter: blur(1px)
@@ -210,6 +215,7 @@ h1
 		transition: background-color $transition-length ease $transition-delay+.1s, filter $transition-length ease $transition-delay, height $transition-length ease $transition-delay, width $transition-length ease $transition-delay//, transform 200ms ease-out
 		mix-blend-mode: plus-lighter
 		z-index: -1
+		// will-change: background, background-color, color, transform, box-shadow, width, height
 
 	a:after
 		@include fa()
@@ -224,12 +230,12 @@ h1
 		// a,
 		// [data-link]
 		// 	color: white
-		.shift.up a
-		.shift.up [data-link]
-			color: var(--ushift-color)
-		.shift.down a
-		.shift.down [data-link]
-			color: var(--dshift-color)
+		// .shift.up a,
+		// .shift.up [data-link]
+		// 	color: var(--ushift-color)
+		// .shift.down a,
+		// .shift.down [data-link]
+		// 	color: var(--dshift-color)
 		.bar-container .caption
 			height: 25px
 			opacity: 1
@@ -237,11 +243,11 @@ h1
 			// transition: opacity .5s cubic-bezier(1, -1, 0, 2), color $transition-length ease
 		&::before
 			@include face_parallax(-30)
-			--scale: 1
+			--scale: 1.08
 			background-color: hsl(var(--accent-hue) 70% 70%)
 			box-shadow: 0 0 10px hsl(var(--accent-hue) 70% 70%)
-			height: 108%
-			width: 108%
+			// height: 108%
+			// width: 108%
 			transition: background-color $transition-length ease, height $transition-length ease, width $transition-length ease
 
 	&.flipped
@@ -286,6 +292,7 @@ h1
 		position: relative
 		height: 8rem
 		bottom: 3rem
+		width: 100%
 		#core
 			fill: none
 		#body
